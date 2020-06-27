@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   setFilter: () => {
-    dispatch(setVisibilityFilter(ownProps.filter))
+    dispatch.sync(setVisibilityFilter(ownProps.filter))
   }
 })
 
