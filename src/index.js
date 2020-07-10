@@ -8,6 +8,10 @@ import 'todomvc-app-css/index.css'
 import { createLoguxCreator } from '@logux/redux'
 import { badge, badgeEn, log } from '@logux/client';
 import { badgeStyles } from '@logux/client/badge/styles';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+
 
 const createStore = createLoguxCreator({
   subprotocol: '1.0.0',
@@ -18,7 +22,7 @@ const createStore = createLoguxCreator({
   token: '' // TODO: We will fill it in next chapter
 });
 
-const store = createStore(reducer)
+const store = createStore(reducer, composeWithDevTools(applyMiddleware( thunkMiddleware )));
 badge(store.client, { messages: badgeEn, styles: badgeStyles });
 log(store.client);
 store.client.start();

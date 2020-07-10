@@ -49,7 +49,7 @@ server.auth(function (_a) {
     // Allow only local users until we will have a proper authentication
     return process.env.NODE_ENV === 'development';
 });
-server.channel('GLOBAL', {
+server.channel('GLOBAL_TEST', {
     access: function (ctx) {
         return true;
     },
@@ -69,7 +69,7 @@ server.type('ADD_TODO', {
     },
     resend: function (ctx, action, meta) {
         // Resend this action to everyone who subscribed to this user
-        return { channel: "GLOBAL" };
+        return { channel: "GLOBAL_TEST" };
     },
     process: function (ctx, action, meta) {
         console.log("PROCESS ADD_TODO");
