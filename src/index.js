@@ -27,6 +27,16 @@ badge(store.client, { messages: badgeEn, styles: badgeStyles });
 log(store.client);
 store.client.start();
 
+// subscription example
+// FIXME: investigate resendResolve is not a function in proxy mode
+/*
+store.client.on('preadd', action => console.log(action))
+store.client.log.add(
+  { type: 'logux/subscribe', channel: 'GLOBAL_TEST' }, 
+  { sync: true }
+)
+*/
+
 render(
   <Provider store={store}>
     <App />
