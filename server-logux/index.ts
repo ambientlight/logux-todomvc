@@ -12,20 +12,9 @@ const server = new Server(
   })
 )
 
-server.auth(({ userId, token }) => {
+server.auth(auth => {
   // Allow only local users until we will have a proper authentication
   return process.env.NODE_ENV === 'development'
-})
-
-server.channel('GLOBAL_TEST', {
-  access (ctx: ChannelContext<{}, { id: string }, {}>) {
-    return true
-  },
-  async load (ctx) {
-    // let name = await db.loadUserName(ctx.params.id)
-    // Creating action to set user name and sending it to subscriber
-    return { type: 'ADD_TODO', name: "TEST TEST TEST" }
-  }
 })
 
 server.type('ADD_TODO', {

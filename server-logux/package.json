@@ -5,7 +5,7 @@
     "start": "tsc index.ts && NODE_ENV=development node index.js"
   },
   "dependencies": {
-    "@logux/server": "^0.8.6",
+    "@logux/server": "0.8.6",
     "dotenv": "^8.2.0",
     "node-pg-migrate": "^5.2.0",
     "pg": "^8.2.1",

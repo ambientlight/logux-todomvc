@@ -2,4 +2,10 @@ import { connect } from 'react-redux'
 import Header from '../components/Header'
 import { addTodo } from '../actions'
 
-export default connect(null, { addTodo })(Header)
+const mapDispatchToProps = (dispatch, props) => ({
+  addTodo: (text) => {
+    dispatch.sync(addTodo(text))
+  }
+})
+
+export default connect(null, mapDispatchToProps)(Header)
