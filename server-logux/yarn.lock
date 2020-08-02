@@ -2,19 +2,19 @@
 # yarn lockfile v1
 
 
-"@logux/core@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@logux/core/-/core-0.6.0.tgz#0eac40afeb28d58d39a0b9a4fae7616cefa878b9"
-  integrity sha512-GROHAtsvOrhB3eMz1scMsnWv+9WVuJ0pWi6dsoO2xs2FBmSMAKOX0RdOfv+4IL/q+b8dw0jKdF7UBKw1LOy4sQ==
+"@logux/core@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@logux/core/-/core-0.6.1.tgz#694757d4a616be6694d8a45739485934823820b9"
+  integrity sha512-4gobJaTcbdVyaynmUov2sP9au2/2xD7bOVfAQrnVMhE64WXaieD6D6nDrRGVGTWFJ0m7j28Xk4UqQplb+sz97w==
   dependencies:
-    nanoevents "^5.1.7"
+    nanoevents "^5.1.8"
 
-"@logux/server@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@logux/server/-/server-0.9.3.tgz#c1bf6adf652511ee22fe41563c743c2d0bd74fc4"
-  integrity sha512-m69H1+kYcgnt+oPfztOTJelXz0SBiGJI/jR6XGHck2m8ZBQ2ss+ZtkJ4ChV2+E+37LiQf6sGQ/TT1TRof+7PYA==
+"@logux/server@^0.9.4":
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/@logux/server/-/server-0.9.4.tgz#8d79f968af9d3c53839d8f3129f636c4ad797cb8"
+  integrity sha512-+48Qwj4cn5hpYIJbxtU3iRpi6a6dIkK52//N/zUUFuK7+5JIhN41wgP8VKBapqWp6vN4Fr+GTa9esoCT6AstfA==
   dependencies:
-    "@logux/core" "^0.6.0"
+    "@logux/core" "^0.6.1"
     JSONStream "^1.3.5"
     colorette "^1.2.0"
     cookie "^0.4.1"
@@ -150,9 +150,9 @@ color-name@~1.1.4:
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
 colorette@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.0.tgz#45306add826d196e8c87236ac05d797f25982e63"
-  integrity sha512-soRSroY+OF/8OdA3PTQXwaDJeMc7TfknKKrxeSCencL2a4+Tx5zhxmmv7hdpCjhKBjehzp8+bwe/T68K0hpIjw==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.1.tgz#4d0b921325c14faf92633086a536db6e89564b1b"
+  integrity sha512-puCDz0CzydiSYOrnXpz/PKd69zRrribezjtE9yd4zvytoRc8+RY/KJPvtPFKZS3E3wP6neGyMe0vOTlHO5L3Pw==
 
 cookie@^0.4.1:
   version "0.4.1"
@@ -326,15 +326,15 @@ mkdirp@~1.0.0:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-nanoevents@^5.1.7, nanoevents@^5.1.8:
+nanoevents@^5.1.8:
   version "5.1.8"
   resolved "https://registry.yarnpkg.com/nanoevents/-/nanoevents-5.1.8.tgz#3a192513ca3dc88421a3b60cb22ca802074aacfb"
   integrity sha512-hxhbaIUYJxJIGFJLB6ls3byky/qWCYWyOY3eMYMyic736S14eW63V8B4fwdNfd97EKhg9346xbEKUYsb+44Hqg==
 
 nanoid@^3.1.10:
-  version "3.1.10"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.10.tgz#69a8a52b77892de0d11cede96bc9762852145bc4"
-  integrity sha512-iZFMXKeXWkxzlfmMfM91gw7YhN2sdJtixY+eZh9V6QWJWTOiurhpKhBMgr82pfzgSqglQgqYSCowEYsz8D++6w==
+  version "3.1.12"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.12.tgz#6f7736c62e8d39421601e4a0c77623a97ea69654"
+  integrity sha512-1qstj9z5+x491jfiC4Nelk+f8XBad7LN20PmyWINJEMRSf3wcAjAWysw1qaA8z6NSKe2sjq1hRSDpBH5paCb6A==
 
 node-pg-migrate@^5.2.0:
   version "5.2.0"
@@ -459,9 +459,9 @@ pino-std-serializers@^2.4.2:
   integrity sha512-WaL504dO8eGs+vrK+j4BuQQq6GLKeCCcHaMB2ItygzVURcL1CycwNEUHTD/lHFHs/NL5qAz2UKrjYWXKSf4aMQ==
 
 pino@^6.3.2:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-6.3.2.tgz#55f73aa61584774ca5984068ffb78e8d519ce19e"
-  integrity sha512-EiP3L1hoFw19KPocWimjnfXeysld0ne89ZRQ+bf8nAeA2TyuLoggNlibAi+Kla67GvQBopLdIZOsh1z/Lruo5Q==
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-6.5.0.tgz#4d3447c0efa75489936c16071bd3abddbaac7e96"
+  integrity sha512-qDIFPZ2h2AMrp+JIWKFUtejiTv5F/+glbizrG9VNvegSCSK6sqnRmerNM9R98/x3RxwKkIf5kJ9q4chXdBdvJA==
   dependencies:
     fast-redact "^2.0.0"
     fast-safe-stringify "^2.0.7"
@@ -538,9 +538,9 @@ slash@^3.0.0:
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
 sonic-boom@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/sonic-boom/-/sonic-boom-1.0.1.tgz#a5fdfcab1ddea31732ce9c7c054f3a5751eee089"
-  integrity sha512-o9tx+bonVEXSaPtptyXQXpP8l6UV9Bi3im2geZskvWw2a/o/hrbWI7EBbbv+rOx6Hubnzun9GgH4WfbgEA3MFQ==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/sonic-boom/-/sonic-boom-1.0.2.tgz#8769646fac2ecb58bd0ed60562280aa4211598df"
+  integrity sha512-sRMmXu7uFDXoniGvtLHuQk5KWovLWoi6WKASn7rw0ro41mPf0fOolkGp4NE6680CbxvNh26zWNyFQYYWXe33EA==
   dependencies:
     atomic-sleep "^1.0.0"
     flatstr "^1.0.12"
@@ -605,9 +605,9 @@ wrap-ansi@^6.2.0:
     strip-ansi "^6.0.0"
 
 ws@^7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.0.tgz#4b2f7f219b3d3737bc1a2fbf145d825b94d38ffd"
-  integrity sha512-iFtXzngZVXPGgpTlP1rBqsUK82p9tKqsWRPg5L56egiljujJT3vGAYnHANvFxBieXrTFavhzhxW52jnaWV+w2w==
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
+  integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
 
 xtend@^4.0.0:
   version "4.0.2"
