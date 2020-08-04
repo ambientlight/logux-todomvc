@@ -7,3 +7,6 @@ export const completeTodo = id => ({ type: types.COMPLETE_TODO, id })
 export const completeAllTodos = () => ({ type: types.COMPLETE_ALL_TODOS })
 export const clearCompleted = () => ({ type: types.CLEAR_COMPLETED })
 export const setVisibilityFilter = filter => ({ type: types.SET_VISIBILITY_FILTER, filter})
+
+export const signUp = (username, password) => ({ type: types.SIGN_UP, username, password })
+export const signIn = (username, password) => ({ type: types.SIGN_UP, username, password })
