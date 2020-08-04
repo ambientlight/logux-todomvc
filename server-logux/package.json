@@ -5,7 +5,8 @@
     "start": "tsc index.ts && NODE_ENV=development node index.js"
   },
   "dependencies": {
-    "@logux/server": "^0.9.4",
+    "@logux/server": "https://github.com/logux/server.git#next",
+    "aws-sdk": "^2.725.0",
     "dotenv": "^8.2.0",
     "node-pg-migrate": "^5.2.0",
     "pg": "^8.2.1",

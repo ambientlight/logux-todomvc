@@ -1,7 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
+import { SHOW_ACTIVE, SHOW_ALL, SHOW_COMPLETED } from '../constants/TodoFilters'
 import FilterLink from '../containers/FilterLink'
-import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from '../constants/TodoFilters'
+import { Route } from 'react-router-dom'
 
 const FILTER_TITLES = {
   [SHOW_ALL]: 'All',
@@ -26,14 +27,13 @@ const Footer = (props) => {
           </li>
         )}
       </ul>
-      {
-        !!completedCount &&
+      <Route path="/" render={props => 
         <button
           className="clear-completed"
-          onClick={onClearCompleted}
-        >Clear completed</button>
-        
-      }
+          onClick={() => props.history.push('/signup')}>
+            sign up
+        </button>
+      }></Route>
     </footer>
   )
 }

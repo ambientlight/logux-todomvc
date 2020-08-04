@@ -17,34 +17,41 @@ server.auth(auth => {
   return process.env.NODE_ENV === 'development'
 })
 
-server.type('ADD_TODO', {
+server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
   access (ctx, action, meta) {
     return true
   },
+  /*
   resend (ctx, action, meta) {
     // Resend this action to everyone who subscribed to this user
-    return { channel: `GLOBAL_TEST` }
+    return { channel: `TEST` }
   },
+  */
   process (ctx, action, meta) {
-    console.log(`PROCESS ADD_TODO`)
+
   },
   finally (ctx, action, meta) {
-    console.log(`FINALLY ADD_TODO`)
+
+  }
+})
+
+server.channel('TEST', {
+  async access (ctx, action, meta) {
+    return true
+  },
+  async load (ctx, action, meta) {
+    return { type: 'ADD_TODO', text: 'Hello from Logux' }
   }
 })
 
 server.otherType({
-  access (ctx, action, meta) {
-    return true
-  },
-  resend (ctx, action, meta) {
-    // Resend this action to everyone who subscribed to this channel
-    return { channel: `GLOBAL_TEST` }
-  },
-  process (ctx, action, meta) {
+  access: (ctx, action, meta) => true,
+  process: (ctx, action, meta) => {
     // do some processing for all expicitly unhandled action
+    console.error("Unhandle actions")
+    console.error(action)
   },
-  finally (ctx, action, meta) {
+  finally: (ctx, action, meta) => {
     // finalization logic for all explictly unhandled actions
   }
 })
