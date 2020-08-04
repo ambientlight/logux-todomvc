@@ -9,7 +9,11 @@ export default class SignUp extends Component {
   }
   
   state = {
-    allowed: false
+    creds: { username: '', password: '' }
+  }
+
+  allowed(){
+    return this.state.creds.username.length > 0 && this.state.creds.password.length > 0
   }
 
   render(){
@@ -20,23 +24,21 @@ export default class SignUp extends Component {
         </header>
     
         <CredsInput 
-          onChange={state => 
-            this.setState({ allowed: state.username.length > 0 && state.password.length > 0 })
-          }
+          onChange={state => this.setState({ creds: state })}
           onCompletion={state => this.props.signUp(state.username, state.password)}
         />
         
         <footer className="footer">
           <div className="filters">
             <button
-              disabled={this.state.allowed}
-              className={this.state.allowed ? 'clear-completed' : ''}
+              disabled={!this.allowed()}
+              className={this.allowed() ? 'clear-completed' : ''}
               style={{
-                  color: this.state.allowed ? 'inherit' : 'lightgrey',
+                  color: this.allowed() ? 'inherit' : 'lightgrey',
                   float: 'left', 
                   marginLeft: '18px'
               }}
-              onClick={() => console.log("should signup")}>
+              onClick={() => this.props.signUp(this.state.creds.username, this.state.creds.password)}>
               sign up
             </button>
           </div>
