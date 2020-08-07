@@ -9,14 +9,16 @@ Projects built with Create-React-App include support for ES6 syntax, as well as 
 ## Installation
 
 From the first terminal tab:
-```
+```shell
 yarn install
 yarn start
 ```
 
-Then open another terminal tab:
+For the server side, make sure you have `awscli` available at path and configured with your credentials. Then open another terminal tab:
 
-```
+```shell
+# create AWS-powered backend stack via CloudFormation
+aws cloudformation deploy --template cf/cognito.yaml --stack-name todoapp-cognito
 cd server-logux
 yarn install
 yarn start

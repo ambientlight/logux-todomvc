@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cognito Stack
+
+Resources:
+  # Creates a user pool in cognito for your app to auth against
+  # This example requires MFA and validates the phone number to use as MFA
+  # Other fields can be added to the schema
+  UserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: todoapp-user-pool
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+  
+Outputs:
+  UserPoolId:
+    Value: !Ref UserPool
+    Export:
+      Name: "UserPool::Id"
