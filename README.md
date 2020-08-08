@@ -23,6 +23,7 @@ aws cloudformation deploy --template cf/cognito.yaml --stack-name todoapp-cognit
 echo AWS_REGION=eu-central-1 > server-logux/.env
 echo USERPOOL_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolId").OutputValue') >> server-logux/.env
 echo USERPOOL_CLIENT_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolClientId").OutputValue') >> server-logux/.env
+```
 
 Then to install dependencies and start the server run:
 
