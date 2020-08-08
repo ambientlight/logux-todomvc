@@ -4,6 +4,7 @@ import * as path from 'path';
 import { ChannelContext } from '@logux/server/context';
 require('dotenv').config({ path: path.resolve(__dirname, '.env')})
 import * as AWS from 'aws-sdk'
+import { SignUpResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
 const cognito = new AWS.CognitoIdentityServiceProvider()
 
@@ -41,28 +42,42 @@ server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
 server.type<{type: 'SIGN_UP', username: string, password: string}>('SIGN_UP', {
   access: (ctx, action, meta) => true,
   async process(ctx, action, meta) {
-    const signUpResult = await cognito.signUp({
-      ClientId: process.env.USERPOOL_CLIENT_ID as string,
-      Password: action.password,
-      Username: action.username
-    }).promise()
 
-    if(!signUpResult.UserConfirmed && signUpResult.$response.error === null){
-      const confirmResult = await cognito.adminConfirmSignUp({
+    let signUpResult;
+    try {
+      signUpResult = await cognito.signUp({
+        ClientId: process.env.USERPOOL_CLIENT_ID as string,
+        Password: action.password,
+        Username: action.username
+      }).promise()
+    } catch (error) {
+      console.error(error)
+      ctx.sendBack({
+        type: "SIGN_UP_ERROR",
+        username: action.username,
+        error
+      })
+      return
+    }
+
+    let confirmResult;
+    try {
+      confirmResult = await cognito.adminConfirmSignUp({
         UserPoolId: process.env.USERPOOL_ID as string,
         Username: action.username
       }).promise()
-
-      if(confirmResult.$response.error !== null){
-        // confirmation error
-      } {
-        // TODO: user confirmed, pass back credentials to the client
-      }
-      console.log(confirmResult.$response.error)
-      console.log(confirmResult.$response.data)
-    } else {
-      // TODO: propagate error back to client as action??? 
+      // user confirmed
+    } catch(error){
+      console.error(error)
+      // no need to handle confirmation error for now
     }
+  
+    // pass back credentials to the client
+    ctx.sendBack({ 
+      type: "SIGN_UP_SUCCESS",
+      username: action.username,
+      token: (signUpResult.$response.data as SignUpResponse).UserSub
+    })
   }
 })
 

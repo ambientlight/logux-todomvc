@@ -69,31 +69,50 @@ server.type('SIGN_UP', {
     access: function (ctx, action, meta) { return true; },
     process: function (ctx, action, meta) {
         return __awaiter(this, void 0, void 0, function () {
-            var signUpResult, confirmResult;
+            var signUpResult, error_1, confirmResult, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, cognito.signUp({
-                            ClientId: process.env.USERPOOL_CLIENT_ID,
-                            Password: action.password,
-                            Username: action.username
-                        }).promise()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, cognito.signUp({
+                                ClientId: process.env.USERPOOL_CLIENT_ID,
+                                Password: action.password,
+                                Username: action.username
+                            }).promise()];
                     case 1:
                         signUpResult = _a.sent();
-                        console.log(signUpResult.UserConfirmed);
-                        console.log(signUpResult.$response.error);
-                        console.log(signUpResult.$response.data);
-                        if (!(!signUpResult.UserConfirmed && signUpResult.$response.error === null)) return [3 /*break*/, 3];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.error(error_1);
+                        ctx.sendBack({
+                            type: "SIGN_UP_ERROR",
+                            username: action.username,
+                            error: error_1
+                        });
+                        return [2 /*return*/];
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
                         return [4 /*yield*/, cognito.adminConfirmSignUp({
                                 UserPoolId: process.env.USERPOOL_ID,
                                 Username: action.username
-                            }).promise()];
-                    case 2:
+                            }).promise()
+                            // user confirmed
+                        ];
+                    case 4:
                         confirmResult = _a.sent();
-                        console.log(confirmResult.$response.error);
-                        console.log(confirmResult.$response.data);
-                        return [3 /*break*/, 3];
-                    case 3:
-                        cognito.adminConfirmSignUp();
+                        return [3 /*break*/, 6];
+                    case 5:
+                        error_2 = _a.sent();
+                        console.error(error_2);
+                        return [3 /*break*/, 6];
+                    case 6:
+                        // pass back credentials to the client
+                        ctx.sendBack({
+                            type: "SIGN_UP_SUCCESS",
+                            username: action.username,
+                            token: signUpResult.$response.data.UserSub
+                        });
                         return [2 /*return*/];
                 }
             });
