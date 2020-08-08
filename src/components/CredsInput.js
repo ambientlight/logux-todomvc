@@ -47,7 +47,7 @@ export default class CredsInput extends Component {
         <input className='edit new-todo'
           ref={this.usernameInput}
           type="text"
-          placeholder="username"
+          placeholder="email"
           autoFocus={true}
           value={this.state.username}
           onChange={this.handleUsernameChange}

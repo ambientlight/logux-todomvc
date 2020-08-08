@@ -39,6 +39,8 @@ exports.__esModule = true;
 var server_1 = require("@logux/server");
 var path = require("path");
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+var AWS = require("aws-sdk");
+var cognito = new AWS.CognitoIdentityServiceProvider();
 var server = new server_1.Server(server_1.Server.loadOptions(process, {
     subprotocol: '1.0.0',
     supports: '1.x',
@@ -61,6 +63,41 @@ server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
     process: function (ctx, action, meta) {
     },
     "finally": function (ctx, action, meta) {
+    }
+});
+server.type('SIGN_UP', {
+    access: function (ctx, action, meta) { return true; },
+    process: function (ctx, action, meta) {
+        return __awaiter(this, void 0, void 0, function () {
+            var signUpResult, confirmResult;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, cognito.signUp({
+                            ClientId: process.env.USERPOOL_CLIENT_ID,
+                            Password: action.password,
+                            Username: action.username
+                        }).promise()];
+                    case 1:
+                        signUpResult = _a.sent();
+                        console.log(signUpResult.UserConfirmed);
+                        console.log(signUpResult.$response.error);
+                        console.log(signUpResult.$response.data);
+                        if (!(!signUpResult.UserConfirmed && signUpResult.$response.error === null)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, cognito.adminConfirmSignUp({
+                                UserPoolId: process.env.USERPOOL_ID,
+                                Username: action.username
+                            }).promise()];
+                    case 2:
+                        confirmResult = _a.sent();
+                        console.log(confirmResult.$response.error);
+                        console.log(confirmResult.$response.data);
+                        return [3 /*break*/, 3];
+                    case 3:
+                        cognito.adminConfirmSignUp();
+                        return [2 /*return*/];
+                }
+            });
+        });
     }
 });
 server.channel('TEST', {

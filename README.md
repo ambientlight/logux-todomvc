@@ -14,11 +14,19 @@ yarn install
 yarn start
 ```
 
-For the server side, make sure you have `awscli` available at path and configured with your credentials. Then open another terminal tab:
+For the server side, make sure you have `jq` and `awscli` available at path and configured with your credentials. Then in another terminal tab run:
 
 ```shell
 # create AWS-powered backend stack via CloudFormation
 aws cloudformation deploy --template cf/cognito.yaml --stack-name todoapp-cognito
+# generate .env for AWS: set AWS_REGION, USERPOOL_ID, USERPOOL_CLIENT_ID for cognito
+echo AWS_REGION=eu-central-1 > server-logux/.env
+echo USERPOOL_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolId").OutputValue') >> server-logux/.env
+echo USERPOOL_CLIENT_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolClientId").OutputValue') >> server-logux/.env
+
+Then to install dependencies and start the server run:
+
+```
 cd server-logux
 yarn install
 yarn start

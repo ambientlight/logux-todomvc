@@ -3,6 +3,9 @@ import { Server } from '@logux/server'
 import * as path from 'path';
 import { ChannelContext } from '@logux/server/context';
 require('dotenv').config({ path: path.resolve(__dirname, '.env')})
+import * as AWS from 'aws-sdk'
+
+const cognito = new AWS.CognitoIdentityServiceProvider()
 
 const server = new Server(
   Server.loadOptions(process, {
@@ -32,6 +35,34 @@ server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
   },
   finally (ctx, action, meta) {
 
+  }
+})
+
+server.type<{type: 'SIGN_UP', username: string, password: string}>('SIGN_UP', {
+  access: (ctx, action, meta) => true,
+  async process(ctx, action, meta) {
+    const signUpResult = await cognito.signUp({
+      ClientId: process.env.USERPOOL_CLIENT_ID as string,
+      Password: action.password,
+      Username: action.username
+    }).promise()
+
+    if(!signUpResult.UserConfirmed && signUpResult.$response.error === null){
+      const confirmResult = await cognito.adminConfirmSignUp({
+        UserPoolId: process.env.USERPOOL_ID as string,
+        Username: action.username
+      }).promise()
+
+      if(confirmResult.$response.error !== null){
+        // confirmation error
+      } {
+        // TODO: user confirmed, pass back credentials to the client
+      }
+      console.log(confirmResult.$response.error)
+      console.log(confirmResult.$response.data)
+    } else {
+      // TODO: propagate error back to client as action??? 
+    }
   }
 })
 

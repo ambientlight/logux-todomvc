@@ -9,15 +9,10 @@ Resources:
     Type: "AWS::Cognito::UserPool"
     Properties:
       UserPoolName: todoapp-user-pool
-      AliasAttributes:
-        - email
-      AutoVerifiedAttributes:
-        - email
-      Schema:
-        - Name: email
-          AttributeDataType: String
-          Mutable: false
-          Required: true
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: admin_only
+            Priority: 1
       Policies:
         PasswordPolicy:
           MinimumLength: 6
@@ -25,9 +20,23 @@ Resources:
           RequireNumbers: false
           RequireSymbols: false
           RequireUppercase: false
+
+  UserPoolClient:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      ClientName: !Sub todoapp-user-pool-client
+      GenerateSecret: false
+      UserPoolId: !Ref UserPool
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
   
 Outputs:
   UserPoolId:
     Value: !Ref UserPool
     Export:
       Name: "UserPool::Id"
+  UserPoolClientId:
+    Value: !Ref UserPoolClient
+    Export:
+      Name: "UserPoolClient::Id"
