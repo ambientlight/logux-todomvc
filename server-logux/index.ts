@@ -3,10 +3,9 @@ import { Server } from '@logux/server'
 import * as path from 'path';
 import { ChannelContext } from '@logux/server/context';
 require('dotenv').config({ path: path.resolve(__dirname, '.env')})
-import * as AWS from 'aws-sdk'
-import { SignUpResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
-const cognito = new AWS.CognitoIdentityServiceProvider()
+import { signUpAndSignIn, signIn } from './auth'
+import { verifyToken } from './verify_jvt'
 
 const server = new Server(
   Server.loadOptions(process, {
@@ -16,8 +15,16 @@ const server = new Server(
   })
 )
 
-server.auth(auth => {
+server.auth(async auth => {
   // Allow only local users until we will have a proper authentication
+  if(auth.userId === 'anonymous'){
+    // allow anonymous auth
+    return true
+  } else {
+    const claimVerifyResult = await verifyToken(auth.token)
+    return claimVerifyResult.userName == auth.userId
+  }
+
   return process.env.NODE_ENV === 'development'
 })
 
@@ -41,44 +48,12 @@ server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
 
 server.type<{type: 'SIGN_UP', username: string, password: string}>('SIGN_UP', {
   access: (ctx, action, meta) => true,
-  async process(ctx, action, meta) {
+  process: signUpAndSignIn
+})
 
-    let signUpResult;
-    try {
-      signUpResult = await cognito.signUp({
-        ClientId: process.env.USERPOOL_CLIENT_ID as string,
-        Password: action.password,
-        Username: action.username
-      }).promise()
-    } catch (error) {
-      console.error(error)
-      ctx.sendBack({
-        type: "SIGN_UP_ERROR",
-        username: action.username,
-        error
-      })
-      return
-    }
-
-    let confirmResult;
-    try {
-      confirmResult = await cognito.adminConfirmSignUp({
-        UserPoolId: process.env.USERPOOL_ID as string,
-        Username: action.username
-      }).promise()
-      // user confirmed
-    } catch(error){
-      console.error(error)
-      // no need to handle confirmation error for now
-    }
-  
-    // pass back credentials to the client
-    ctx.sendBack({ 
-      type: "SIGN_UP_SUCCESS",
-      username: action.username,
-      token: (signUpResult.$response.data as SignUpResponse).UserSub
-    })
-  }
+server.type<{type: 'SIGN_IN', username: string, password: string}>('SIGN_IN', {
+  access: (ctx, action, meta) => true,
+  process: signIn
 })
 
 server.channel('TEST', {

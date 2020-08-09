@@ -8,11 +8,14 @@
     "@logux/server": "https://github.com/logux/server.git#next",
     "aws-sdk": "^2.725.0",
     "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.4",
     "node-pg-migrate": "^5.2.0",
     "pg": "^8.2.1",
     "pg-promise": "^10.5.7"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.0.14"
   }
 }

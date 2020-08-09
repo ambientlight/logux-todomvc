@@ -19,10 +19,18 @@ For the server side, make sure you have `jq` and `awscli` available at path and 
 ```shell
 # create AWS-powered backend stack via CloudFormation
 aws cloudformation deploy --template cf/cognito.yaml --stack-name todoapp-cognito
-# generate .env for AWS: set AWS_REGION, USERPOOL_ID, USERPOOL_CLIENT_ID for cognito
-echo AWS_REGION=eu-central-1 > server-logux/.env
-echo USERPOOL_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolId").OutputValue') >> server-logux/.env
-echo USERPOOL_CLIENT_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolClientId").OutputValue') >> server-logux/.env
+# define AWS_REGION, USERPOOL_ID, USERPOOL_CLIENT_ID for cognito
+export AWS_REGION=eu-central-1
+export USERPOOL_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolId").OutputValue')
+export USERPOOL_CLIENT_ID=$(aws cloudformation describe-stacks --stack-name todoapp-cognito | jq -r '.Stacks[0].Outputs | .[] | select(.OutputKey=="UserPoolClientId").OutputValue')
+
+# get JSON Web Key Set for JWT token verification
+curl https://cognito-idp.$AWS_REGION.amazonaws.com/$USERPOOL_ID/.well-known/jwks.json > server-logux/jwks.json
+
+# generate .env
+echo $AWS_REGION > server-logux/.env
+echo $USERPOOL_ID >> server-logux/.env
+echo $USERPOOL_CLIENT_ID >> server-logux/.env
 ```
 
 Then to install dependencies and start the server run:
