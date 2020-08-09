@@ -24,8 +24,6 @@ server.auth(async auth => {
     const claimVerifyResult = await verifyToken(auth.token)
     return claimVerifyResult.userName == auth.userId
   }
-
-  return process.env.NODE_ENV === 'development'
 })
 
 server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {

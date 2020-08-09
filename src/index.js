@@ -42,7 +42,12 @@ store.log.on('add', async action => {
     localStorage.setItem('token', action.authResult.AccessToken)
     store.client.changeUser(action.username, action.authResult.AccessToken);
     await store.client.node.waitFor('synchronized');
-    console.info(`Client assumed user: ${action.username}`)
+    console.info(`Client assumed user: ${action.username}`);
+    window.location.href = '/';
+    break;
+  case 'SIGN_UP_ERROR':
+  case 'SIGN_IN_ERROR':
+    alert(action.error.message)
     break;
   default:
     break
