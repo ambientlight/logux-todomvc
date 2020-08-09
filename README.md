@@ -75,7 +75,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 - [ ] 1. DynamoDB backend on server-side
 - [ ] 2. Cloudformation deployment to AWS
-- [ ] 3. Integrate authentification with Congito
+- [X] 3. Integrate authentification with Congito
 - [ ] 4. Rewrite with hooks in designated brunch
 - [ ] 5. Integrate `redux-crdt` once completed.
 - [ ] 6. [Server-less cloud](https://github.com/logux/logux/issues/6) after `logux-server/logux-client` can work via HTTP.
