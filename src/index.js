@@ -15,13 +15,23 @@ import { applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
+const ANONYMOUS = '__anonymous__';
+
+const tokenExpiration = localStorage.getItem('tokenExpiration');
+const isTokenValid = (tokenExpiration && !isNaN(parseInt(tokenExpiration)) && parseInt(tokenExpiration) > Date.now())
+const userId = localStorage.getItem('userId')
+if(isTokenValid && userId){
+  console.info(`Client assumed user: ${userId}`);
+}
+
 const createStore = createLoguxCreator({
   subprotocol: '1.0.0',
   server: process.env.NODE_ENV === 'development'
     ? 'ws://localhost:31337'
     : 'wss://logux.example.com',
-  userId: localStorage.getItem('userId') || 'anonymous',
-  token: localStorage.getItem('token'),
+  // do not use the token if 
+  userId: isTokenValid && userId ? userId : ANONYMOUS,
+  token: isTokenValid ? localStorage.getItem('token') : null,
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware( thunkMiddleware )));
@@ -31,7 +41,7 @@ store.client.start();
 
 store.client.on('preadd', action => console.info(action))
 // subscription example
-store.dispatch.sync({ type: 'logux/subscribe', channel: 'TEST' })
+// store.dispatch.sync({ type: 'logux/subscribe', channel: 'TEST' })
 
 store.log.on('add', async action => {
   switch(action.type){
@@ -40,6 +50,8 @@ store.log.on('add', async action => {
     // user username for userid since jwt token encodes it rather then sub and we will need for server-side jwt verification
     localStorage.setItem('userId', action.username)
     localStorage.setItem('token', action.authResult.AccessToken)
+    localStorage.setItem('tokenExpiration', Date.now() + action.authResult.ExpiresIn * 1000)
+
     store.client.changeUser(action.username, action.authResult.AccessToken);
     await store.client.node.waitFor('synchronized');
     console.info(`Client assumed user: ${action.username}`);
