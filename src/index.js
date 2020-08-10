@@ -43,6 +43,10 @@ store.client.on('preadd', action => console.info(action))
 // subscription example
 // store.dispatch.sync({ type: 'logux/subscribe', channel: 'TEST' })
 
+if(isTokenValid && userId){
+  store.dispatch.sync({ type: 'LOAD_TODOS' })
+}
+
 store.log.on('add', async action => {
   switch(action.type){
   case 'SIGN_IN_SUCCESS':

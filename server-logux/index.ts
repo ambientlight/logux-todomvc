@@ -8,6 +8,8 @@ import { signUpAndSignIn, signIn } from './auth'
 import { verifyToken } from './verify_jvt'
 import { Todo } from './dynamodb' 
 
+const ANONYMOUS = '__anonymous__';
+
 const server = new Server(
   Server.loadOptions(process, {
     subprotocol: '1.0.0',
@@ -18,7 +20,7 @@ const server = new Server(
 
 server.auth(async auth => {
   // Allow only local users until we will have a proper authentication
-  if(auth.userId === '__anonymous__'){
+  if(auth.userId === ANONYMOUS){
     // allow anonymous auth
     return true
   } else {
@@ -40,7 +42,7 @@ server.type<{type: 'SIGN_IN', username: string, password: string}>('SIGN_IN', {
 server.type<{type: 'ADD_TODO', text: string}>('ADD_TODO', {
   access: (ctx, action, meta) => true,
   process: async (ctx, action, meta) => {
-    if(ctx.userId === '__anonymous__'){ return }
+    if(ctx.userId === ANONYMOUS){ return }
 
     const todo = new Todo({
       userId: ctx.userId, 
@@ -54,6 +56,16 @@ server.type<{type: 'ADD_TODO', text: string}>('ADD_TODO', {
       console.info("Save operation was successful.");
     } catch (error) {
       console.error(error);
+    }
+  }
+})
+
+server.type<{type: 'LOAD_TODOS'}>('LOAD_TODOS', {
+  access: (ctx, action, meta) => ctx.userId !== ANONYMOUS,
+  process: async (ctx, action, meta) => {
+    const res = await (Todo.query("userId").eq(ctx.userId) as any).exec()
+    for (let todo of res){
+      ctx.sendBack({ type: 'ADD_TODO', text: todo.text })
     }
   }
 })

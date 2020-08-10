@@ -40,6 +40,14 @@ yarn start
 
 Also you would need to have dynamoDB-local setup and running at `http://localhost:8000`. Refer to [Deploying DynamoDB Locally on Your Computer](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
 
+## Cleanup
+
+To cleanup the AWS infrustructure, ran:
+
+```
+aws cloudformation delete-stack --stack-name todoapp-cognito
+```
+
 ## TODOs
 
 - [ ] 1. DynamoDB backend on server-side
