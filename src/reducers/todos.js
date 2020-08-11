@@ -16,27 +16,27 @@ export default function todos(state = initialState, action) {
       return [
         ...state,
         {
-          id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-          completed: false,
+          ts: action.ts,
+          completed: action.completed || false,
           text: action.text
         }
       ]
 
     case DELETE_TODO:
       return state.filter(todo =>
-        todo.id !== action.id
+        todo.ts !== action.ts
       )
 
     case EDIT_TODO:
       return state.map(todo =>
-        todo.id === action.id ?
+        todo.ts === action.ts ?
           { ...todo, text: action.text } :
           todo
       )
 
     case COMPLETE_TODO:
       return state.map(todo =>
-        todo.id === action.id ?
+        todo.ts === action.ts ?
           { ...todo, completed: !todo.completed } :
           todo
       )

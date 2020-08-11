@@ -1,9 +1,9 @@
 import * as types from '../constants/ActionTypes'
 
-export const addTodo = text => ({ type: types.ADD_TODO, text })
-export const deleteTodo = id => ({ type: types.DELETE_TODO, id })
-export const editTodo = (id, text) => ({ type: types.EDIT_TODO, id, text })
-export const completeTodo = id => ({ type: types.COMPLETE_TODO, id })
+export const addTodo = (text, ts) => ({ type: types.ADD_TODO, text, ts })
+export const deleteTodo = ts => ({ type: types.DELETE_TODO, ts })
+export const editTodo = (ts, text) => ({ type: types.EDIT_TODO, ts, text })
+export const completeTodo = ts => ({ type: types.COMPLETE_TODO, ts })
 export const completeAllTodos = () => ({ type: types.COMPLETE_ALL_TODOS })
 export const clearCompleted = () => ({ type: types.CLEAR_COMPLETED })
 export const setVisibilityFilter = filter => ({ type: types.SET_VISIBILITY_FILTER, filter})

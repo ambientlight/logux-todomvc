@@ -3,8 +3,8 @@ import Header from '../components/Header'
 import { addTodo } from '../actions'
 
 const mapDispatchToProps = (dispatch, props) => ({
-  addTodo: (text) => {
-    dispatch.sync(addTodo(text))
+  addTodo: (text, ts) => {
+    dispatch.sync(addTodo(text, ts))
   }
 })
 

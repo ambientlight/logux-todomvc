@@ -5,7 +5,7 @@
     "start": "tsc index.ts && NODE_ENV=development node index.js"
   },
   "dependencies": {
-    "@logux/server": "https://github.com/logux/server.git#next",
+    "@logux/server": "^0.9.5",
     "aws-sdk": "^2.725.0",
     "dotenv": "^8.2.0",
     "dynamoose": "2.2.1",

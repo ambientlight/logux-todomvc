@@ -39,71 +39,80 @@ server.type<{type: 'SIGN_IN', username: string, password: string}>('SIGN_IN', {
   process: signIn
 })
 
-server.type<{type: 'ADD_TODO', text: string}>('ADD_TODO', {
+server.type<{type: 'ADD_TODO', text: string, ts: number, completed?: boolean}>('ADD_TODO', {
   access: (ctx, action, meta) => true,
   process: async (ctx, action, meta) => {
     if(ctx.userId === ANONYMOUS){ return }
 
     const todo = new Todo({
       userId: ctx.userId, 
-      ts: Date.now(), 
+      ts: action.ts, 
       text: action.text,
-      completed: false
+      completed: action.completed || false
     })
 
     try {
       await todo.save();
-      console.info("Save operation was successful.");
     } catch (error) {
       console.error(error);
     }
   }
 })
 
+server.type<{type: 'DELETE_TODO', ts: number}>('DELETE_TODO', {
+  access: (ctx, action, meta) => true,
+  process: async (ctx, action, meta) => {
+    if(ctx.userId === ANONYMOUS){ return }
+
+    (Todo as any).delete({ userId: ctx.userId, ts: action.ts })
+  }
+})
+
+server.type<{type: 'EDIT_TODO', ts: number, text: string}>("EDIT_TODO", {
+  access: (ctx, action, meta) => true,
+  process: async (ctx, action, meta) => {
+    if(ctx.userId === ANONYMOUS){ return }
+
+    Todo.update({ userId: ctx.userId, ts: action.ts, text: action.text })
+  }  
+})
+
+server.type<{type: 'COMPLETE_TODO', ts: number, text: string}>("COMPLETE_TODO", {
+  access: (ctx, action, meta) => true,
+  process: async (ctx, action, meta) => {
+    if(ctx.userId === ANONYMOUS){ return }
+
+    const todo = await (Todo as any).get({ userId: ctx.userId, ts: action.ts })
+    todo.completed = !todo.completed
+    await todo.save()
+  }
+})
+
 server.type<{type: 'LOAD_TODOS'}>('LOAD_TODOS', {
   access: (ctx, action, meta) => ctx.userId !== ANONYMOUS,
   process: async (ctx, action, meta) => {
+    if(ctx.userId === ANONYMOUS){ return }
+
     const res = await (Todo.query("userId").eq(ctx.userId) as any).exec()
     for (let todo of res){
-      ctx.sendBack({ type: 'ADD_TODO', text: todo.text })
+      ctx.sendBack({ 
+        type: 'ADD_TODO', 
+        text: todo.text, 
+        ts: todo.ts, 
+        completed: todo.completed
+      })
     }
   }
 })
 
-/*
-server.type(/^\w*TODO|SET_VISIBILITY_FILTER$/, {
-  access (ctx, action, meta) {
-    return true
-  },
-  resend (ctx, action, meta) {
-    // Resend this action to everyone who subscribed to this user
-    return { channel: `TEST` }
-  },
-  process (ctx, action, meta) {},
-  finally (ctx, action, meta) {}
-})
-*/
-
-/*
-server.channel('TEST', {
-  async access (ctx, action, meta) {
-    return true
-  },
-  async load (ctx, action, meta) {
-    return { type: 'ADD_TODO', text: 'Hello from Logux' }
-  }
-})
-*/
-
 server.otherType({
   access: (ctx, action, meta) => true,
   process: (ctx, action, meta) => {
-    // do some processing for all expicitly unhandled action
+    // some processing for all expicitly unhandled action
     console.error("Unhandle actions")
     console.error(action)
   },
   finally: (ctx, action, meta) => {
-    // finalization logic for all explictly unhandled actions
   }
 })
 

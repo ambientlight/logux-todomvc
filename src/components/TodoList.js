@@ -5,14 +5,14 @@ import TodoItem from './TodoItem'
 const TodoList = ({ filteredTodos, actions }) => (
   <ul className="todo-list">
     {filteredTodos.map(todo =>
-      <TodoItem key={todo.id} todo={todo} {...actions} />
+      <TodoItem key={todo.ts} todo={todo} {...actions} />
     )}
   </ul>
 )
 
 TodoList.propTypes = {
   filteredTodos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    ts: PropTypes.number.isRequired,
     completed: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired
   }).isRequired).isRequired,

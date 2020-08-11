@@ -9,7 +9,7 @@ const Header = ({ addTodo }) => (
       newTodo
       onSave={(text) => {
         if (text.length !== 0) {
-          addTodo(text)
+          addTodo(text, Date.now())
         }
       }}
       placeholder="What needs to be done?"
