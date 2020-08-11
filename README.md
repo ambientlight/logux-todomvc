@@ -1,7 +1,6 @@
 # Logux TodoMVC Example
-WIP.
-Example project to explore and demonstate how Logux client-server stack may look like when built it around conventional `react/redux` app.
-For this reason `TodoMVC` from [Getting Start with Redux](https://egghead.io/courses/getting-started-with-redux) and [reduxjs/examples/todomvc](https://github.com/reduxjs/redux/tree/master/examples/todomvc) was taken.
+Example project to explore and demonstate how Logux client-server stack may look like when built it around conventional `react/redux` app targeting AWS stack. 
+For this reason `TodoMVC` from [Getting Start with Redux](https://egghead.io/courses/getting-started-with-redux) and [reduxjs/examples/todomvc](https://github.com/reduxjs/redux/tree/master/examples/todomvc) was taken. Logux backend stack is built on top of AWS DynamoDB(via dynamoose) + AWS Cognito. 
 
 ## Installation
 
@@ -11,7 +10,7 @@ yarn install
 yarn start
 ```
 
-For the server side, make sure you have `jq` and `awscli` available at path and configured with your credentials. The following setup relies on local environment with Congito(authentification layer on AWS) being an exception. Then in another terminal tab run:
+For the server side, make sure you have `jq` and `awscli` available at path and configured with your credentials. The following setup relies on local environment with Congito(authentification layer on AWS) being an exception(requires AWS infra). Then in another terminal tab run:
 
 ```shell
 # create AWS-powered backend stack via CloudFormation
@@ -50,7 +49,7 @@ aws cloudformation delete-stack --stack-name todoapp-cognito
 
 ## TODOs
 
-- [ ] 1. DynamoDB backend on server-side
+- [X] 1. DynamoDB backend
 - [X] 2. Integrate authentification with Congito
 - [ ] 3. Rewrite with hooks in designated brunch
 - [ ] 4. Integrate `redux-crdt` once completed.
