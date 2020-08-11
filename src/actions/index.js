@@ -10,3 +10,7 @@ export const setVisibilityFilter = filter => ({ type: types.SET_VISIBILITY_FILTE
 
 export const signUp = (username, password) => ({ type: types.SIGN_UP, username, password })
 export const signIn = (username, password) => ({ type: types.SIGN_IN, username, password })
+
+export const restoreUser = (username) => ({ type: types.RESTORE_USER, username })
+export const loadTodos = () => ({ type: types.LOAD_TODOS })
+export const signOut = () => ({ type: types.SIGN_OUT })

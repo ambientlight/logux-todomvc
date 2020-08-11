@@ -11,7 +11,7 @@ const FILTER_TITLES = {
 }
 
 const Footer = (props) => {
-  const { activeCount, completedCount, onClearCompleted } = props
+  const { activeCount, completedCount, onClearCompleted, user, onSignOut } = props
   const itemWord = activeCount === 1 ? 'item' : 'items'
   return (
     <footer className="footer">
@@ -28,11 +28,17 @@ const Footer = (props) => {
         )}
       </ul>
       <Route path="/" render={props => 
-        <button
-          className="clear-completed"
-          onClick={() => props.history.push('/signup')}>
-            sign up
-        </button>
+        user 
+          ? <button
+              className="clear-completed"
+              onClick={() => onSignOut()}>
+             sign out {user}
+          </button> 
+          : <button
+              className="clear-completed"
+              onClick={() => props.history.push('/signup')}>
+              sign up
+          </button>
       }></Route>
     </footer>
   )
@@ -42,6 +48,8 @@ Footer.propTypes = {
   completedCount: PropTypes.number.isRequired,
   activeCount: PropTypes.number.isRequired,
   onClearCompleted: PropTypes.func.isRequired,
+  onSignOut: PropTypes.func.isRequired,
+  user: PropTypes.string
 }
 
 export default Footer

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Footer from './Footer'
 import VisibleTodoList from '../containers/VisibleTodoList'
 
-const MainSection = ({ todosCount, completedCount, actions }) =>
+const MainSection = ({ todosCount, completedCount, actions, user }) =>
   (
     <section className="main">
       {
@@ -25,6 +25,8 @@ const MainSection = ({ todosCount, completedCount, actions }) =>
           completedCount={completedCount}
           activeCount={todosCount - completedCount}
           onClearCompleted={actions.clearCompleted}
+          onSignOut={actions.signOut}
+          user={user}
         />
       }
     </section>
@@ -33,7 +35,8 @@ const MainSection = ({ todosCount, completedCount, actions }) =>
 MainSection.propTypes = {
   todosCount: PropTypes.number.isRequired,
   completedCount: PropTypes.number.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  user: PropTypes.string
 }
 
 export default MainSection;

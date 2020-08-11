@@ -4,16 +4,11 @@ import {
   EDIT_TODO,
   COMPLETE_TODO,
   COMPLETE_ALL_TODOS,
-  CLEAR_COMPLETED
+  CLEAR_COMPLETED,
+  SIGN_OUT
 } from '../constants/ActionTypes'
 
-const initialState = [
-  {
-    text: 'Use Redux',
-    completed: false,
-    id: 0
-  }
-]
+const initialState = []
 
 export default function todos(state = initialState, action) {
   switch (action.type) {
@@ -56,6 +51,8 @@ export default function todos(state = initialState, action) {
     case CLEAR_COMPLETED:
       return state.filter(todo => todo.completed === false)
 
+    case SIGN_OUT:
+      return []
     default:
       return state
   }

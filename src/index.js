@@ -13,16 +13,15 @@ import { badgeStyles } from '@logux/client/badge/styles';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { SIGN_UP_SUCCESS, SIGN_IN_SUCCESS, SIGN_UP_ERROR, SIGN_IN_ERROR, SIGN_OUT } from './constants/ActionTypes'
+import { restoreUser, loadTodos } from './actions/index'
 
 const ANONYMOUS = '__anonymous__';
 
 const tokenExpiration = localStorage.getItem('tokenExpiration');
 const isTokenValid = (tokenExpiration && !isNaN(parseInt(tokenExpiration)) && parseInt(tokenExpiration) > Date.now())
 const userId = localStorage.getItem('userId')
-if(isTokenValid && userId){
-  console.info(`Client assumed user: ${userId}`);
-}
 
 const createStore = createLoguxCreator({
   subprotocol: '1.0.0',
@@ -44,13 +43,16 @@ store.client.on('preadd', action => console.info(action))
 // store.dispatch.sync({ type: 'logux/subscribe', channel: 'TEST' })
 
 if(isTokenValid && userId){
-  store.dispatch.sync({ type: 'LOAD_TODOS' })
+  console.info(`Client assumed user: ${userId}`);
+  store.dispatch(restoreUser(userId))
+  store.dispatch.sync(loadTodos())
 }
 
+// auth logic
 store.log.on('add', async action => {
   switch(action.type){
-  case 'SIGN_IN_SUCCESS':
-  case 'SIGN_UP_SUCCESS':
+  case SIGN_UP_SUCCESS:
+  case SIGN_IN_SUCCESS:
     // user username for userid since jwt token encodes it rather then sub and we will need for server-side jwt verification
     localStorage.setItem('userId', action.username)
     localStorage.setItem('token', action.authResult.AccessToken)
@@ -61,8 +63,14 @@ store.log.on('add', async action => {
     console.info(`Client assumed user: ${action.username}`);
     window.location.href = '/';
     break;
-  case 'SIGN_UP_ERROR':
-  case 'SIGN_IN_ERROR':
+  case SIGN_OUT:
+    localStorage.removeItem('userId')
+    localStorage.removeItem('token')
+    localStorage.removeItem('tokenExpiration')
+    store.client.changeUser(ANONYMOUS, '');
+    break
+  case SIGN_UP_ERROR:
+  case SIGN_IN_ERROR:
     alert(action.error.message)
     break;
   default:
