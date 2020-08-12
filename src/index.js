@@ -61,6 +61,8 @@ store.log.on('add', async action => {
     store.client.changeUser(action.username, action.authResult.AccessToken);
     await store.client.node.waitFor('synchronized');
     console.info(`Client assumed user: ${action.username}`);
+
+    // TODO: full reload is not needed, use react routing here
     window.location.href = '/';
     break;
   case SIGN_OUT:
