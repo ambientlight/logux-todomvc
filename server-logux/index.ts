@@ -91,8 +91,6 @@ server.type<{type: 'COMPLETE_TODO', ts: number, text: string}>("COMPLETE_TODO", 
 server.type<{type: 'LOAD_TODOS'}>('LOAD_TODOS', {
   access: (ctx, action, meta) => ctx.userId !== ANONYMOUS,
   process: async (ctx, action, meta) => {
-    if(ctx.userId === ANONYMOUS){ return }
-
     const res = await (Todo.query("userId").eq(ctx.userId) as any).exec()
     for (let todo of res){
       ctx.sendBack({ 
