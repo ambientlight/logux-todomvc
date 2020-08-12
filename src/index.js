@@ -13,10 +13,12 @@ import { badgeStyles } from '@logux/client/badge/styles';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
+import { Router, Route } from 'react-router-dom'
 import { SIGN_UP_SUCCESS, SIGN_IN_SUCCESS, SIGN_UP_ERROR, SIGN_IN_ERROR, SIGN_OUT } from './constants/ActionTypes'
-import { restoreUser, loadTodos } from './actions/index'
+import { restoreUser, loadTodos, addTodo } from './actions/index'
 
+const history = createBrowserHistory()
 const ANONYMOUS = '__anonymous__';
 
 const tokenExpiration = localStorage.getItem('tokenExpiration');
@@ -39,13 +41,13 @@ log(store.client);
 store.client.start();
 
 store.client.on('preadd', action => console.info(action))
-// subscription example
-// store.dispatch.sync({ type: 'logux/subscribe', channel: 'TEST' })
 
 if(isTokenValid && userId){
   console.info(`Client assumed user: ${userId}`);
   store.dispatch(restoreUser(userId))
   store.dispatch.sync(loadTodos())
+} else {
+  store.dispatch(addTodo('Hi! Please sign in for sync to work', Date.now()))
 }
 
 // auth logic
@@ -61,9 +63,9 @@ store.log.on('add', async action => {
     store.client.changeUser(action.username, action.authResult.AccessToken);
     await store.client.node.waitFor('synchronized');
     console.info(`Client assumed user: ${action.username}`);
-
-    // TODO: full reload is not needed, use react routing here
-    window.location.href = '/';
+    
+    store.dispatch.sync(loadTodos())
+    history.push('/todos');
     break;
   case SIGN_OUT:
     localStorage.removeItem('userId')
@@ -82,7 +84,7 @@ store.log.on('add', async action => {
 
 render(
   <Provider store={store}>
-    <Router>
+    <Router history={history}>
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/signin" component={SignIn} />
       <Route exact path={["/", "/todos"]} component={App} />

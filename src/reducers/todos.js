@@ -5,7 +5,9 @@ import {
   COMPLETE_TODO,
   COMPLETE_ALL_TODOS,
   CLEAR_COMPLETED,
-  SIGN_OUT
+  SIGN_OUT,
+  SIGN_IN_SUCCESS,
+  SIGN_UP_SUCCESS
 } from '../constants/ActionTypes'
 
 const initialState = []
@@ -51,6 +53,10 @@ export default function todos(state = initialState, action) {
     case CLEAR_COMPLETED:
       return state.filter(todo => todo.completed === false)
 
+    // hacky: just drop todos when user changes. 
+    // use LOAD_TODOS to load new user todos from the server
+    case SIGN_IN_SUCCESS:
+    case SIGN_UP_SUCCESS:
     case SIGN_OUT:
       return []
     default:
